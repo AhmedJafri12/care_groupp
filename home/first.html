@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthCare Hospital</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #b3b3b3; color: #333; line-height: 1.6; }
+    nav { background: #0d3b66; color: white; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    nav h1 { font-size: 1.5rem; }
+    nav ul { display: flex; gap: 20px; list-style: none; }
+    nav li { cursor: pointer; transition: color 0.3s; }
+    nav li:hover { color: #a3c9f5; }
+
+    .hero { display: flex; flex-direction: column; text-align: center; justify-content: center; align-items: center; padding: 60px 20px; background: linear-gradient(to right, #e6f2ff, #f0f8ff); animation: fadeIn 2s ease-in; }
+    .hero h2 { font-size: 2.5rem; color: #0d3b66; margin-bottom: 20px; animation: slideInLeft 1.2s ease; }
+    .hero p { max-width: 600px; margin-bottom: 20px; color: #444; }
+    .hero button { padding: 12px 25px; border: none; background: #0d3b66; color: white; font-size: 1rem; border-radius: 8px; cursor: pointer; transition: transform 0.3s, background 0.3s; }
+    .hero button:hover { transform: scale(1.05); background: #15599f; }
+    .hero img { max-width: 400px; margin-top: 50px; animation: slideInRight 1.2s ease; }
+
+    .departments { padding: 60px 20px; background: white; text-align: center; }
+    .departments h2 { font-size: 2rem; margin-bottom: 30px; color: #0d3b66; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+    .card { background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; animation: fadeUp 1s ease forwards; opacity: 0; }
+    .card:hover { transform: scale(1.05); box-shadow: 0 8px 14px rgba(0,0,0,0.15); }
+    .card span { font-size: 2rem; display: block; margin-bottom: 10px; }
+    .card p { font-weight: bold; color: #444; }
+
+    .about { padding: 60px 20px; background: #f0f4f8; text-align: center; animation: fadeIn 2s ease; }
+    .about h2 { font-size: 2rem; margin-bottom: 20px; color: #0d3b66; }
+    .about p { max-width: 800px; margin: 0 auto; color: #555; }
+
+    .contact { padding: 60px 20px; background: #0d3b66; color: white; text-align: center; }
+    .contact h2 { font-size: 2rem; margin-bottom: 15px; }
+    .contact p { margin-bottom: 20px; }
+    .contact button { padding: 12px 25px; border: none; background: white; color: #0d3b66; font-weight: bold; border-radius: 8px; cursor: pointer; transition: transform 0.3s, background 0.3s; }
+    .contact button:hover { transform: scale(1.05); background: #ddd; }
+
+    footer { background: #062a4d; color: #ddd; text-align: center; padding: 15px; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes slideInRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes fadeUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    @media (max-width: 768px) {
+      .hero { flex-direction: column; text-align: center; }
+      .hero img { margin-top: 20px; }
+    }
+    a.card { text-decoration: none; color: inherit; display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <h1>🏥 HealthCare Hospital</h1>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Login</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="../patient ui/login.php">Patient Login</a></li>
+              <li><a class="dropdown-item" href="../doctordash/login.php">Doctor Login</a></li>
+              <li><a class="dropdown-item" href="../admindash/login.php">Admin Login</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Department</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="generalmedicine.html">🏥 General Medicine</a></li>
+              <li><a class="dropdown-item" href="pageneuro.html">🧠 Neurology</a></li>
+              <li><a class="dropdown-item" href="diabetes.html">💉 Diabetes & Endocrinology</a></li>
+              <li><a class="dropdown-item" href="Gl and liver disease.html">🩺 GI & Liver Diseases</a></li>
+              <li><a class="dropdown-item" href="nephrology.html">🧪 Nephrology</a></li>
+              <li><a class="dropdown-item" href="surgical-oncology.html">✂️ Surgical Oncology</a></li>
+              <li><a class="dropdown-item" href="cardiology.html">❤️ Cardiology</a></li>
+              <li><a class="dropdown-item" href="medical-oncology.html">🎗️ Medical Oncology</a></li>
+              <li><a class="dropdown-item" href="dentistry.html">🦷 Dentistry</a></li>
+              <li><a class="dropdown-item" href="rheumatology.html">🦵 Rheumatology</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div>
+      <h2>Compassionate Care for a Healthier Tomorrow</h2>
+      <p>Our hospital provides world-class healthcare services with expert doctors and modern facilities.</p>
+      <button>Book Appointment</button>
+    </div>
+    <img src="https://tupa-q-001.sitecorecontenthub.cloud/api/public/content/d74a3b903066450d8cbeaf510b1d29d4?fit=scale-down" alt="Doctor">
+  </section>
+
+  <!-- Departments -->
+  <section class="departments">
+    <h2>Our Departments</h2>
+    <div class="grid">
+      <a class="card" href="generalmedicine.html" style="animation-delay: 0.1s;">
+        <span>🏥</span>
+        <p>General Medicine</p>
+      </a>
+
+      <a class="card" href="pageneuro.html" style="animation-delay: 0.2s;">
+        <span>🧠</span>
+        <p>Neurology</p>
+      </a>
+
+      <a class="card" href="diabetes.html" style="animation-delay: 0.3s;">
+        <span>💉</span>
+        <p>Diabetes & Endocrinology</p>
+      </a>
+
+      <a class="card" href="Gl and liver disease.html" style="animation-delay: 0.4s;">
+        <span>🩺</span>
+        <p>GI & Liver Diseases</p>
+      </a>
+      <a class="card" href="nephrology.html" style="animation-delay: 0.5s;"><span>🧪</span><p>Nephrology</p></a>
+      <a class="card" href="surgical-oncology.html" style="animation-delay: 0.6s;"><span>✂️</span><p>Surgical Oncology</p></a>
+      <a class="card" href="cardiology.html" style="animation-delay: 0.7s;"><span>❤️</span><p>Cardiology</p></a>
+      <a class="card" href="medical-oncology.html" style="animation-delay: 0.8s;"><span>🎗️</span><p>Medical Oncology</p></a>
+      <a class="card" href="dentistry.html" style="animation-delay: 0.9s;"><span>🦷</span><p>Dentistry</p></a>
+      <a class="card" href="rheumatology.html" style="animation-delay: 1s;"><span>🦵</span><p>Rheumatology</p></a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about">
+    <h2>About Us</h2>
+    <p>HealthCare Hospital is dedicated to providing top-quality healthcare services with the latest technology and compassionate staff. Our team of specialists is here to ensure your well-being and comfort.</p>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact">
+    <h2>Get in Touch</h2>
+    <p>📞 +92 300 1234567 | ✉️ info@healthcare.com</p>
+    <button>Contact Us</button>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 HealthCare Hospital. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthCare Hospital</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <style>
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #b3b3b3; color: #333; line-height: 1.6; }
+
+   
+    nav {
+      background: #0d3b66;
+      color: white;
+      padding: 15px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav h1 { font-size: 1.5rem; }
+    nav ul { display: flex; gap: 20px; list-style: none; }
+    nav li { cursor: pointer; transition: color 0.3s; }
+    nav li:hover { color: #a3c9f5; }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      background: linear-gradient(to right, #e6f2ff, #f0f8ff);
+      animation: fadeIn 2s ease-in;
+    }
+    .hero h2 {
+      font-size: 2.5rem;
+      color: #0d3b66;
+      margin-bottom: 20px;
+      animation: slideInLeft 1.2s ease;
+    }
+    .hero p {
+      max-width: 600px;
+      margin-bottom: 20px;
+      color: #444;
+    }
+    .hero button {
+      padding: 12px 25px;
+      border: none;
+      background: #0d3b66;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .hero button:hover {
+      transform: scale(1.05);
+      background: #15599f;
+    }
+    .hero img {
+      max-width: 400px;
+      margin-top: 50px;
+      animation: slideInRight 1.2s ease;
+    }
+
+    /* Departments */
+    .departments {
+      padding: 60px 20px;
+      background: white;
+      text-align: center;
+    }
+    .departments h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #0d3b66;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      animation: fadeUp 1s ease forwards;
+      opacity: 0;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 14px rgba(0,0,0,0.15);
+    }
+    .card span {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .card p {
+      font-weight: bold;
+      color: #444;
+    }
+
+    /* About Section */
+    .about {
+      padding: 60px 20px;
+      background: #f0f4f8;
+      text-align: center;
+      animation: fadeIn 2s ease;
+    }
+    .about h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #0d3b66;
+    }
+    .about p {
+      max-width: 800px;
+      margin: 0 auto;
+      color: #555;
+    }
+
+    /* Contact Section */
+    .contact {
+      padding: 60px 20px;
+      background: #0d3b66;
+      color: white;
+      text-align: center;
+    }
+    .contact h2 { font-size: 2rem; margin-bottom: 15px; }
+    .contact p { margin-bottom: 20px; }
+    .contact button {
+      padding: 12px 25px;
+      border: none;
+      background: white;
+      color: #0d3b66;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .contact button:hover {
+      transform: scale(1.05);
+      background: #ddd;
+    }
+
+    /* Footer */
+    footer {
+      background: #062a4d;
+      color: #ddd;
+      text-align: center;
+      padding: 15px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes slideInLeft {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes fadeUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero { flex-direction: column; text-align: center; }
+      .hero img { margin-top: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <h1>🏥 HealthCare Hospital</h1>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Department
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">🏥 General Medicine</a></li>
+              <li><a class="dropdown-item" href="#">🧠 Neurology </a></li>
+              <li><a class="dropdown-item" href="#">💉 Diabetes & Endocrinology</a></li>
+              <li><a class="dropdown-item" href="#">🩺 GI & Liver Diseases</a></li>
+              <li><a class="dropdown-item" href="#">🧪 Nephrology</a></li>
+              <li><a class="dropdown-item" href="#">✂️ Surgical Oncology</a></li>
+              <li><a class="dropdown-item" href="#">❤️ cardiologist</a></li>
+              <li><a class="dropdown-item" href="#">🎗️ Surgical Oncology</a></li>
+              <li><a class="dropdown-item" href="#">🦷 dentist</a></li>
+              <li><a class="dropdown-item" href="#">🦵 Rheumatology</a></li>
+
+            </ul>
+          </li>
+        </ul>
+       
+      </div>
+    </div>
+  </nav>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div>
+      <h2>Compassionate Care for a Healthier Tomorrow</h2>
+      <p>Our hospital provides world-class healthcare services with expert doctors and modern facilities.</p>
+      <button>Book Appointment</button>
+    </div>
+    <img src="https://tupa-q-001.sitecorecontenthub.cloud/api/public/content/d74a3b903066450d8cbeaf510b1d29d4?fit=scale-down" alt="Doctor">
+  </section>
+
+  <!-- Departments -->
+  <section class="departments">
+    <h2>Our Departments</h2>
+    <div class="grid">
+      <div class="card" style="animation-delay: 0.1s;"><span>🏥</span> <a href="generalmedicine.html"></a><p>General Medicine</p></div>
+      <div class="card" style="animation-delay: 0.2s;"><span>🧠</span><p>Neurology</p></div>
+      <div class="card" style="animation-delay: 0.3s;"><span>💉</span><p>Diabetes & Endocrinology</p></div>
+      <div class="card" style="animation-delay: 0.4s;"><span>🩺</span><p>GI & Liver Diseases</p></div>
+      <div class="card" style="animation-delay: 0.5s;"><span>🧪</span><p>Nephrology</p></div>
+      <div class="card" style="animation-delay: 0.6s;"><span>✂️</span><p>Surgical Oncology</p></div>
+      <div class="card" style="animation-delay: 0.7s;"><span>❤️</span><p>cardiologist</p></div>
+      <div class="card" style="animation-delay: 0.8s;"><span>🎗️</span><p>Medical Oncology</p></div>
+      <div class="card" style="animation-delay: 0.9s;"><span>🦷</span><p>dentist</p></div>
+      <div class="card" style="animation-delay: 1s;"><span>🦵</span><p>Rheumatology</p></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about">
+    <h2>About Us</h2>
+    <p>HealthCare Hospital is dedicated to providing top-quality healthcare services with the latest technology and compassionate staff. Our team of specialists is here to ensure your well-being and comfort.</p>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact">
+    <h2>Get in Touch</h2>
+    <p>📞 +92 300 1234567 | ✉️ info@healthcare.com</p>
+    <button>Contact Us</button>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 HealthCare Hospital. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>
