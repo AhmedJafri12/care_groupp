@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --header-height: 70px;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --light-bg: #f8f9fa;
+            --dark-text: #212529;
+            --border-color: #dee2e6;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fb;
+            overflow-x: hidden;
+            color: var(--dark-text);
+        }
+        
+        /* Sidebar Styles */
+        #sidebar {
+            position: fixed;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        #sidebar .sidebar-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        #sidebar ul.components {
+            padding: 20px 0;
+        }
+        
+        #sidebar ul li a {
+            padding: 15px 25px;
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+        
+        #sidebar ul li a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        #sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left: 4px solid white;
+        }
+        
+        #sidebar ul li a i {
+            margin-right: 10px;
+            width: 25px;
+            text-align: center;
+        }
+        
+        /* Content Styles */
+        #content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: var(--header-height);
+            padding: 0 20px;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .dashboard-card {
+            text-align: center;
+            padding: 25px 15px;
+        }
+        
+        .dashboard-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .dashboard-card .count {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .dashboard-card .title {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        
+        /* Table Styles */
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            padding: 12px 15px;
+        }
+        
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .btn-action {
+            padding: 5px 10px;
+            margin: 0 3px;
+            font-size: 0.9rem;
+        }
+        
+        /* Form Styles */
+        .form-control, .form-select {
+            border-radius: 8px;
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #495057;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            #sidebar {
+                margin-left: -var(--sidebar-width);
+            }
+            
+            #sidebar.active {
+                margin-left: 0;
+            }
+            
+            #content {
+                margin-left: 0;
+            }
+            
+            #content.active {
+                margin-left: var(--sidebar-width);
+            }
+            
+            .overlay {
+                display: none;
+                position: fixed;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+            
+            .overlay.active {
+                display: block;
+            }
+        }
+        
+        /* Toggle Button */
+        #sidebarToggle {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 1.2rem;
+        }
+        
+        /* Section Management */
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Custom Colors */
+        .bg-custom-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .text-custom-primary {
+            color: var(--primary-color);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay for mobile -->
+    <div class="overlay"></div>
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>MediAdmin</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li>
+                <a href="#dashboard" class="active nav-link" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#doctors" class="nav-link" data-section="doctors">
+                    <i class="fas fa-user-md"></i> Doctors
+                </a>
+            </li>
+            <li>
+                <a href="#patients" class="nav-link" data-section="patients">
+                    <i class="fas fa-procedures"></i> Patients
+                </a>
+            </li>
+            <li>
+                <a href="#cities" class="nav-link" data-section="cities">
+                    <i class="fas fa-city"></i> Cities
+                </a>
+            </li>
+            <li>
+                <a href="#users" class="nav-link" data-section="users">
+                    <i class="fas fa-users-cog"></i> Users
+                </a>
+            </li>
+            <li>
+                <a href="#website-info" class="nav-link" data-section="website-info">
+                    <i class="fas fa-newspaper"></i> Website Info
+                </a>
+            </li>
+            <li>
+                <a href="#logout" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Content -->
+    <div id="content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button id="sidebarToggle" class="btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h5 class="mb-0 ms-3">Hospital Management System</h5>
+                
+                <div class="d-flex align-items-center ms-auto">
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=Admin%20Profile%20Picture&id=11dec03b-859d-4d59-b913-a99bb094725a" alt="Admin profile picture" width="40" height="40" class="rounded-circle me-2">
+                            <span>Admin User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Sign out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="mb-4">Dashboard Overview</h4>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card">
+                            <i class="fas fa-user-md"></i>
+                            <div class="count">24</div>
+                            <div class="title">Total Doctors</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card">
+                            <i class="fas fa-procedures"></i>
+                            <div class="count">152</div>
+                            <div class="title">Total Patients</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card">
+                            <i class="fas fa-city"></i>
+                            <div class="count">8</div>
+                            <div class="title">Cities</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-4">
+                        <div class="card dashboard-card">
+                            <i class="fas fa-newspaper"></i>
+                            <div class="count">12</div>
+                            <div class="title">Website Info Items</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-8 mb-4">
+                        <div class="card">
+                            <div class="card-header">Overview</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="appointmentChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-header">Recent Activity</div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-user-plus text-success me-2"></i>
+                                            New patient registered
+                                        </div>
+                                        <small class="text-muted">2 min ago</small>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-calendar-check text-primary me-2"></i>
+                                            Appointment scheduled
+                                        </div>
+                                        <small class="text-muted">15 min ago</small>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-file-medical text-info me-2"></i>
+                                            Medical report uploaded
+                                        </div>
+                                        <small class="text-muted">1 hour ago</small>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-user-md text-warning me-2"></i>
+                                            Doctor availability updated
+                                        </div>
+                                        <small class="text-muted">3 hours ago</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctors Section -->
+            <div id="doctors" class="section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Doctor Management</h4>
+                    <div class="d-flex gap-2">
+                        <a class="btn btn-primary" href="docregform/form.php">
+                            <i class="fas fa-plus me-2"></i>Add New Doctor
+                        </a>
+                        <a class="btn btn-outline-secondary" href="docregform/viewdoc.php">
+                            <i class="fas fa-list me-2"></i>View All Doctors
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Doctors List</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Specialization</th>
+                                        <th>Contact</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>D001</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=Doctor%20Profile%20Picture&id=11dec03b-859d-4d59-b913-a99bb094725a" alt="Doctor profile picture" class="rounded-circle me-2" width="40" height="40">
+                                                Dr. Sarah Johnson
+                                            </div>
+                                        </td>
+                                        <td>Cardiology</td>
+                                        <td>sarah.j@hospital.com</td>
+                                        <td><span class="badge bg-success status-badge">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D002</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=Doctor%20Profile%20Picture&id=11dec03b-859d-4d59-b913-a99bb094725a" alt="Doctor profile picture" class="rounded-circle me-2" width="40" height="40">
+                                                Dr. Michael Chen
+                                            </div>
+                                        </td>
+                                        <td>Neurology</td>
+                                        <td>michael.c@hospital.com</td>
+                                        <td><span class="badge bg-success status-badge">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>D003</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://placeholder-image-service.onrender.com/image/40x40?prompt=Doctor%20Profile%20Picture&id=11dec03b-859d-4d59-b913-a99bb094725a" alt="Doctor profile picture" class="rounded-circle me-2" width="40" height="40">
+                                                Dr. Emily Rodriguez
+                                            </div>
+                                        </td>
+                                        <td>Pediatrics</td>
+                                        <td>emily.r@hospital.com</td>
+                                        <td><span class="badge bg-warning status-badge">On Leave</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patients Section -->
+            <div id="patients" class="section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Patient Management</h4>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPatientModal">
+                        <i class="fas fa-plus me-2"></i>Add New Patient
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Patients List</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Age</th>
+                                        <th>Gender</th>
+                                        <th>Condition</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>P001</td>
+                                        <td>John Smith</td>
+                                        <td>45</td>
+                                        <td>Male</td>
+                                        <td>Hypertension</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>P002</td>
+                                        <td>Maria Garcia</td>
+                                        <td>32</td>
+                                        <td>Female</td>
+                                        <td>Diabetes</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>P003</td>
+                                        <td>Robert Johnson</td>
+                                        <td>68</td>
+                                        <td>Male</td>
+                                        <td>Arthritis</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cities Section -->
+            <div id="cities" class="section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>City Management</h4>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCityModal">
+                        <i class="fas fa-plus me-2"></i>Add New City
+                    </button>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">Cities List</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>City Name</th>
+                                                <th>Patients</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>C001</td>
+                                                <td>New York</td>
+                                                <td>42</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>C002</td>
+                                                <td>Los Angeles</td>
+                                                <td>35</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>C003</td>
+                                                <td>Chicago</td>
+                                                <td>28</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary btn-action"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-sm btn-danger btn-action"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">City Distribution</div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="cityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Settings Section -->
+            <div id="settings" class="section">
+                <h4 class="mb-4">System Settings</h4>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">General Settings</div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label">Hospital Name</label>
+                                        <input type="text" class="form-control" value="General Hospital">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" value="contact@generalhospital.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" value="+1 (555) 123-4567">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">Notification Settings</div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                        <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="smsNotifications">
+                                        <label class="form-check-label" for="smsNotifications">SMS Notifications</label>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="appointmentReminders" checked>
+                                        <label class="form-check-label" for="appointmentReminders">Appointment Reminders</label>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="newPatientAlerts" checked>
+                                        <label class="form-check-label" for="newPatientAlerts">New Patient Alerts</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save Preferences</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar toggle functionality
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const overlay = document.querySelector('.overlay');
+            
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                content.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+            
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                content.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+            
+            // Navigation functionality
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#logout') {
+                        // Logout functionality would go here
+                        alert('Logout functionality would be implemented here.');
+                        return;
+                    }
+                    
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and sections
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Add active class to clicked link and corresponding section
+                    this.classList.add('active');
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // On mobile, close sidebar after selection
+                    if (window.innerWidth < 992) {
+                        sidebar.classList.remove('active');
+                        content.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Initialize charts (appointments removed)
+            
+            const cityCtx = document.getElementById('cityChart').getContext('2d');
+            const cityChart = new Chart(cityCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix'],
+                    datasets: [{
+                        data: [30, 25, 20, 15, 10],
+                        backgroundColor: [
+                            '#4361ee',
+                            '#3a0ca3',
+                            '#7209b7',
+                            '#f72585',
+                            '#4cc9f0'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>
