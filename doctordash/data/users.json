@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "username": "drsmith",
+    "password": "pass123",
+    "name": "Dr. John Smith",
+    "email": "dr.smith@example.com",
+    "specialty": "Cardiology"
+  },
+  {
+    "id": 2,
+    "username": "drayesha",
+    "password": "pass123",
+    "name": "Dr. Ayesha Khan",
+    "email": "ayesha.khan@example.com",
+    "specialty": "Neurology"
+  }
+]

@@ -1,0 +1,5 @@
+[
+  {"id":101,"doctor_id":1,"patient":"Ali Raza","datetime":"2025-10-01T10:00","reason":"Follow-up"},
+  {"id":102,"doctor_id":1,"patient":"Maria Khan","datetime":"2025-10-01T11:00","reason":"Chest pain"},
+  {"id":201,"doctor_id":2,"patient":"Zara Ahmed","datetime":"2025-10-02T09:30","reason":"Migraine"}
+]
